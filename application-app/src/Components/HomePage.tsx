@@ -3,6 +3,7 @@ import { Application } from "./Application";
 import type { ApplicationType } from "../Types/ApplicationType";
 import { useState } from "react";
 import { ApplicationCol } from "./ApplicationCol";
+import { AccountMenu } from "./AccountMenu";
 
 export function HomePage() {
   const [applications, setApplications] = useState<ApplicationType[]>([
@@ -42,14 +43,21 @@ export function HomePage() {
       location: "Remote",
     },
   ]);
+
   return (
     <div className="p-6 relative min-h-screen font-Inter flex gap-3 bg-slate-100 text-slate-900">
       <div className="flex flex-col align-center gap-3 mx-auto">
-        <header className="text-2xl font-light">Job Tracker</header>
+        <header className="flex items-center justify-between text-2xl font-light">
+          Job Tracker
+          <AccountMenu
+            onProfile={() => console.log("Go to profile")}
+            onSignOut={() => console.log("Sign out")}
+          />
+        </header>
         <div className="flex flex-1 gap-3 ">
           <ApplicationCol applications={applications} status="Saved" />
           <ApplicationCol applications={applications} status="Applied" />
-          <ApplicationCol applications={applications} status="Interviews" />
+          <ApplicationCol applications={applications} status="Interview" />
           <ApplicationCol applications={applications} status="Offered" />
           <ApplicationCol applications={applications} status="Rejected" />
         </div>
