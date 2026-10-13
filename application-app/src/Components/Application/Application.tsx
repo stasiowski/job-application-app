@@ -1,4 +1,4 @@
-import type { ApplicationType } from "../Types/ApplicationType";
+import type { ApplicationType } from "../../Types/ApplicationType";
 
 type ApplicationProps = {
   application: ApplicationType;

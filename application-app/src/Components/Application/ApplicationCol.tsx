@@ -1,5 +1,5 @@
 import { Application } from "./Application";
-import type { ApplicationType } from "../Types/ApplicationType";
+import type { ApplicationType } from "../../Types/ApplicationType";
 import { EyeOff } from "lucide-react";
 
 type ApplicationColProps = {
