@@ -18,7 +18,7 @@ export function ApplicationCol({ applications, status }: ApplicationColProps) {
         {applications
           .filter((a) => a.status === status)
           .map((a) => (
-            <Application application={a} />
+            <Application application={a} key={a.id} />
           ))}
       </ul>
     </div>
