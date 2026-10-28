@@ -20,6 +20,7 @@ function App() {
         console.log(error);
       });
   }, []);
+
   return (
     <Router>
       <Routes>
