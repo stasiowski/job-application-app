@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 const applicationRouter = require("./controllers/applications");
+const userRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 
 const app = express();
 
@@ -16,5 +18,7 @@ mongoose
 app.use(express.json());
 
 app.use("/api/applications", applicationRouter);
+app.use("/api/users", userRouter);
+app.use("/api/login", loginRouter);
 
 module.exports = app;

@@ -2,7 +2,7 @@ import { ApplicationCol } from "./ApplicationCol";
 import type { ApplicationType } from "../../Types/ApplicationType";
 import type { StatusProps } from "../../Types/StatusesType";
 
-type ApplicationHomeProps = StatusProps & {
+type RenderColProps = StatusProps & {
   applications: ApplicationType[];
 };
 
@@ -10,7 +10,7 @@ export function RenderCol({
   applications,
   statuses,
   setStatuses,
-}: ApplicationHomeProps) {
+}: RenderColProps) {
   return (
     <div className="flex flex-1 justify-start gap-3">
       {Object.keys(statuses).map((status: string) => (

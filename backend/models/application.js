@@ -8,6 +8,10 @@ const applicationSchema = new mongoose.Schema({
   date: Date,
   status: String,
   location: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 applicationSchema.set("toJSON", {

@@ -1,16 +1,39 @@
 const applicationRouter = require("express").Router();
 const Application = require("../models/application");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+
+function getTokenFrom(request) {
+  const authorization = request.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+  return null;
+}
 
 // Returns all applications as json
 applicationRouter.get("/", async (request, response) => {
-  //finds all applications in mongodb db
-  const apps = await Application.find({});
+  //finds all applications in mongodb db and populates it with the user
+  const apps = await Application.find({}).populate("user", {
+    username: 1,
+    passwordHash: 1,
+  });
   response.json(apps);
 });
 // Creates new Application
 applicationRouter.post("/", async (request, response) => {
   // gets body from request as json
   const body = request.body;
+
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+
+  if (!user) {
+    return response.status(400).json({ error: "userID is invalid/missing" });
+  }
 
   if (!body) {
     return response.status(400).json({ error: "backend body not found" });
@@ -25,6 +48,8 @@ applicationRouter.post("/", async (request, response) => {
   });
   //saves to mongodb db
   const savedApplication = await newApp.save();
+  user.applications.concat(newApp.id);
+  await user.save();
   return response.status(201).json(savedApplication);
 });
 

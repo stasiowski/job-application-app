@@ -1,11 +1,23 @@
 import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { SettingsButton } from "./SettingsButton";
 import { UserButton } from "./UserButton";
 import { SettingsDropdown, AccountDropdown } from "./NavbarDropdowns";
 import type { StatusProps } from "../../Types/StatusesType";
+import type { UserType } from "../../Types/UserType";
 type OpenMenu = "settings" | "account" | null;
 
-export function RightNavbar({ statuses, setStatuses }: StatusProps) {
+type RightNavbarProps = StatusProps & {
+  user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+};
+
+export function RightNavbar({
+  statuses,
+  setStatuses,
+  user,
+  setUser,
+}: RightNavbarProps) {
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -29,26 +41,37 @@ export function RightNavbar({ statuses, setStatuses }: StatusProps) {
     setOpenMenu((prev) => (prev === menu ? null : menu));
   }
 
-  return (
-    <div ref={navbarRef} className="flex items-center gap-3">
-      <div className="relative">
-        <SettingsButton
-          handleClick={() => {
-            toggleMenu("settings");
-          }}
-        />
-        {openMenu === "settings" && (
-          <SettingsDropdown statuses={statuses} setStatuses={setStatuses} />
-        )}
+  if (!user) {
+    return (
+      <Link
+        className="text-sm bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"
+        to="/login"
+      >
+        Log in
+      </Link>
+    );
+  } else {
+    return (
+      <div ref={navbarRef} className="flex items-center gap-3">
+        <div className="relative">
+          <SettingsButton
+            handleClick={() => {
+              toggleMenu("settings");
+            }}
+          />
+          {openMenu === "settings" && (
+            <SettingsDropdown statuses={statuses} setStatuses={setStatuses} />
+          )}
+        </div>
+        <div ref={navbarRef} className="relative">
+          <UserButton
+            handleClick={() => {
+              toggleMenu("account");
+            }}
+          />
+          {openMenu === "account" && <AccountDropdown setUser={setUser} />}
+        </div>
       </div>
-      <div ref={navbarRef} className="relative">
-        <UserButton
-          handleClick={() => {
-            toggleMenu("account");
-          }}
-        />
-        {openMenu === "account" && <AccountDropdown />}
-      </div>
-    </div>
-  );
+    );
+  }
 }

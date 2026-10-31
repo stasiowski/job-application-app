@@ -1,8 +1,15 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import type { StatusProps } from "../../Types/StatusesType";
+import type { UserType } from "../../Types/UserType";
+import { setToken } from "../../Services/requests";
 
-export function SettingsDropdown({ statuses, setStatuses }: StatusProps) {
+type NavbarDropdownsProps = StatusProps;
+
+export function SettingsDropdown({
+  statuses,
+  setStatuses,
+}: NavbarDropdownsProps) {
   const [toggleVisibleCol, setToggleVisibleCol] = useState(false);
 
   function handleLeave() {
@@ -34,11 +41,22 @@ export function SettingsDropdown({ statuses, setStatuses }: StatusProps) {
   );
 }
 
-export function AccountDropdown() {
+export function AccountDropdown({
+  setUser,
+}: {
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+}) {
+  function handleLogOut() {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("user");
+  }
   return (
     <div className="absolute right-0 top-full z-50 mt-1 flex w-36 flex-col gap-3.5 rounded-lg bg-white p-3 text-sm shadow-md">
-      <a>Profile</a>
-      <a>Log out</a>
+      <a className="cursor-pointer">Profile</a>
+      <a className="cursor-pointer" onClick={handleLogOut}>
+        Log out
+      </a>
     </div>
   );
 }
