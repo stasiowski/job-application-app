@@ -2,15 +2,21 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { SettingsButton } from "./SettingsButton";
 import { UserButton } from "./UserButton";
-import { SettingsDropdown, AccountDropdown } from "./NavbarDropdowns";
+import {
+  SettingsDropdown,
+  AccountDropdown,
+  AddApplicationDropdown,
+} from "./NavbarDropdowns";
 import type { StatusProps } from "../../Types/StatusesType";
 import type { UserType } from "../../Types/UserType";
-type OpenMenu = "settings" | "account" | null;
+import { AddButton } from "./AddButton";
 
 type RightNavbarProps = StatusProps & {
   user: UserType;
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
 };
+
+export type OpenMenu = "settings" | "account" | "addApplication" | null;
 
 export function RightNavbar({
   statuses,
@@ -53,7 +59,17 @@ export function RightNavbar({
   } else {
     return (
       <div ref={navbarRef} className="flex items-center gap-3">
-        <div className="relative">
+        <div className="flex">
+          <AddButton
+            handleClick={() => {
+              toggleMenu("addApplication");
+            }}
+          />
+          {openMenu === "addApplication" && (
+            <AddApplicationDropdown setOpenMenu={setOpenMenu} />
+          )}
+        </div>
+        <div className="relative flex">
           <SettingsButton
             handleClick={() => {
               toggleMenu("settings");
@@ -63,7 +79,7 @@ export function RightNavbar({
             <SettingsDropdown statuses={statuses} setStatuses={setStatuses} />
           )}
         </div>
-        <div ref={navbarRef} className="relative">
+        <div ref={navbarRef} className="relative flex">
           <UserButton
             handleClick={() => {
               toggleMenu("account");

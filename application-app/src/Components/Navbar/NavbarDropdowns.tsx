@@ -1,10 +1,40 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Briefcase, X } from "lucide-react";
 import { useState } from "react";
 import type { StatusProps } from "../../Types/StatusesType";
 import type { UserType } from "../../Types/UserType";
 import { setToken } from "../../Services/requests";
+import type { OpenMenu } from "./RightNavbar";
 
 type NavbarDropdownsProps = StatusProps;
+
+export function AddApplicationDropdown({
+  setOpenMenu,
+}: {
+  setOpenMenu: React.Dispatch<React.SetStateAction<OpenMenu>>;
+}) {
+  return (
+    <div className="outer fixed right-0 -top-1 -bottom-1 w-140 z-50 mt-1 bg-white shadow-md">
+      <div className="inner flex flex-col p-6">
+        <div className="1st-col justify-between flex items-center px-4 py-3 rounded-lg bg-slate-100 text-slate-900">
+          <div className="flex items-center gap-4">
+            <div className="icon bg-blue-500 p-1.5 rounded-3xl">
+              <Briefcase size={30} strokeWidth={1.5} color="#ffffff" />
+            </div>
+            <span className="font-light">Add Application</span>
+          </div>
+          <button
+            onClick={() => {
+              setOpenMenu(null);
+            }}
+            className="p-2 cursor-pointer"
+          >
+            <X size={30} strokeWidth={1.2} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function SettingsDropdown({
   statuses,
