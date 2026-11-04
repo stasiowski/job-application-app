@@ -45,6 +45,7 @@ applicationRouter.post("/", async (request, response) => {
     date: body.date,
     status: body.status,
     location: body.location,
+    user: user._id,
   });
   //saves to mongodb db
   const savedApplication = await newApp.save();

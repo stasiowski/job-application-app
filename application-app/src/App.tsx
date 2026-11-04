@@ -44,6 +44,7 @@ function App() {
           element={
             <HomePage
               applications={applications}
+              setApplications={setApplications}
               user={user}
               setUser={setUser}
             />

@@ -17,7 +17,7 @@ export async function create(application: ApplicationType) {
   const config = {
     headers: { Authorization: token },
   };
-  const response = await axios.post("/api/application", application, config);
+  const response = await axios.post("/api/applications", application, config);
   return response.data;
 }
 

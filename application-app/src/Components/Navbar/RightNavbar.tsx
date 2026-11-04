@@ -9,11 +9,13 @@ import {
 } from "./NavbarDropdowns";
 import type { StatusProps } from "../../Types/StatusesType";
 import type { UserType } from "../../Types/UserType";
-import { AddButton } from "./AddButton";
+import { AddButton } from "./AddApplication/AddButton";
+import type { ApplicationType } from "../../Types/ApplicationType";
 
 type RightNavbarProps = StatusProps & {
   user: UserType;
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  setApplications: React.Dispatch<React.SetStateAction<ApplicationType[]>>;
 };
 
 export type OpenMenu = "settings" | "account" | "addApplication" | null;
@@ -23,6 +25,7 @@ export function RightNavbar({
   setStatuses,
   user,
   setUser,
+  setApplications,
 }: RightNavbarProps) {
   const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
   const navbarRef = useRef<HTMLDivElement>(null);
@@ -66,7 +69,10 @@ export function RightNavbar({
             }}
           />
           {openMenu === "addApplication" && (
-            <AddApplicationDropdown setOpenMenu={setOpenMenu} />
+            <AddApplicationDropdown
+              setOpenMenu={setOpenMenu}
+              setApplications={setApplications}
+            />
           )}
         </div>
         <div className="relative flex">

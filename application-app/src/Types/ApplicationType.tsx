@@ -4,5 +4,4 @@ export type ApplicationType = {
   date: Date;
   status: string;
   location: string;
-  id: string;
 };
