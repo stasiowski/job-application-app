@@ -4,10 +4,12 @@ import type { StatusProps } from "../../Types/StatusesType";
 
 type RenderColProps = StatusProps & {
   applications: ApplicationType[];
+  setApplications: React.Dispatch<React.SetStateAction<ApplicationType[]>>;
 };
 
 export function RenderCol({
   applications,
+  setApplications,
   statuses,
   setStatuses,
 }: RenderColProps) {
@@ -17,6 +19,7 @@ export function RenderCol({
         <ApplicationCol
           key={status}
           applications={applications}
+          setApplications={setApplications}
           status={status}
           statuses={statuses}
           setStatuses={setStatuses}

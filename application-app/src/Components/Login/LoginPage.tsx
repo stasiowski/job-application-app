@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login, register } from "../../Services/requests";
 import { setToken } from "../../Services/requests";
 import type { UserType } from "../../Types/UserType";
@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 type LoginPageProps = {
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  user: UserType;
 };
 
-export function LoginPage({ setUser }: LoginPageProps) {
+export function LoginPage({ setUser, user }: LoginPageProps) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showSignUp, setShowSignUp] = useState<boolean>(false);
@@ -16,6 +17,12 @@ export function LoginPage({ setUser }: LoginPageProps) {
   const [registerPassword, setRegisterPassword] = useState<string>("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  });
 
   async function handleLogin(username: string, password: string) {
     const user = await login({ username, password });
@@ -28,7 +35,9 @@ export function LoginPage({ setUser }: LoginPageProps) {
 
   async function handleRegister(username: string, password: string) {
     const newUser = await register({ username, password });
+    await handleLogin(username, password);
     console.log(newUser);
+    navigate("/");
   }
 
   return (

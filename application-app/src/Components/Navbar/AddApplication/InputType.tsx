@@ -22,7 +22,7 @@ export function InputType({
     return (
       <select
         id="status"
-        required
+        required={true}
         value={value}
         onChange={(event) => {
           handleChange(event.target.value);

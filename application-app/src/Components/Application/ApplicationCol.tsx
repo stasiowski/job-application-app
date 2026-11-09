@@ -2,9 +2,11 @@ import { Application } from "./Application";
 import type { ApplicationType } from "../../Types/ApplicationType";
 import { EyeOff } from "lucide-react";
 import type { StatusProps } from "../../Types/StatusesType";
+import { remove } from "../../Services/requests";
 
 type ApplicationColProps = StatusProps & {
   applications: ApplicationType[];
+  setApplications: React.Dispatch<React.SetStateAction<ApplicationType[]>>;
   status: string;
 };
 
@@ -16,8 +18,19 @@ export function ApplicationCol({
   status,
   statuses,
   setStatuses,
+  setApplications,
 }: ApplicationColProps) {
   const key = status as keyof typeof statuses;
+
+  //Handles removing from db + from State
+  async function handleRemove(applicationId: string) {
+    await remove(applicationId);
+    setApplications((prev) =>
+      prev.filter(
+        (application: ApplicationType) => application.id !== applicationId,
+      ),
+    );
+  }
 
   if (statuses[key]) {
     return (
@@ -38,7 +51,12 @@ export function ApplicationCol({
           {applications
             .filter((a) => a.status === status)
             .map((a) => (
-              <Application application={a} key={a.id} />
+              <Application
+                application={a}
+                key={a.id}
+                setApplications={setApplications}
+                handleRemove={handleRemove}
+              />
             ))}
         </ul>
       </div>

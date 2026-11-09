@@ -3,6 +3,7 @@ const Application = require("../models/application");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+//Returns token from request authorization param
 function getTokenFrom(request) {
   const authorization = request.get("authorization");
   if (authorization && authorization.startsWith("Bearer ")) {
@@ -11,31 +12,48 @@ function getTokenFrom(request) {
   return null;
 }
 
+//Gets token from body, verifies it, finds user in db
+async function getUserFromToken(request) {
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
+  if (!decodedToken.id) {
+    return null;
+  }
+  const user = await User.findById(decodedToken.id);
+  return user;
+}
 // Returns all applications as json
 applicationRouter.get("/", async (request, response) => {
-  //finds all applications in mongodb db and populates it with the user
-  const apps = await Application.find({}).populate("user", {
-    username: 1,
-    passwordHash: 1,
-  });
-  response.json(apps);
+  try {
+    const user = await getUserFromToken(request);
+
+    if (!user) {
+      return response.status(401).json({
+        error: "User not found or token invalid",
+      });
+    }
+
+    const apps = await Application.find({ user: user._id }).populate("user", {
+      username: 1,
+      passwordHash: 1,
+    });
+
+    response.json(apps);
+  } catch (error) {
+    return response.status(401).json({
+      error: "Token missing, invalid or expired",
+    });
+  }
 });
 // Creates new Application
 applicationRouter.post("/", async (request, response) => {
-  // gets body from request as json
   const body = request.body;
-
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
-  }
-  const user = await User.findById(decodedToken.id);
+  const user = await getUserFromToken(request);
 
   if (!user) {
     return response.status(400).json({ error: "userID is invalid/missing" });
   }
 
-  if (!body) {
+  if (!request.body) {
     return response.status(400).json({ error: "backend body not found" });
   }
 
@@ -49,7 +67,7 @@ applicationRouter.post("/", async (request, response) => {
   });
   //saves to mongodb db
   const savedApplication = await newApp.save();
-  user.applications.concat(newApp.id);
+  user.applications = user.applications.concat(newApp.id);
   await user.save();
   return response.status(201).json(savedApplication);
 });

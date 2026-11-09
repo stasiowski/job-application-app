@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { StatusProps } from "../../Types/StatusesType";
 import type { UserType } from "../../Types/UserType";
 import { setToken } from "../../Services/requests";
@@ -27,7 +28,7 @@ export function AddApplicationDropdown({
   const [status, setStatus] = useState<string>("");
 
   async function handleAdd() {
-    const application = {
+    const newApplication = {
       title: title,
       company: company,
       location: location,
@@ -35,9 +36,16 @@ export function AddApplicationDropdown({
       status: status,
     };
 
-    let response = await create(application);
+    let response = await create(newApplication);
+    response = [...response, response.id];
     response = dateConvert([response]);
+    console.log(response);
     setApplications((prev) => [...prev, response[0]]);
+    setTitle("");
+    setCompany("");
+    setLocation("");
+    setDate("");
+    setStatus("");
   }
 
   return (
@@ -45,7 +53,7 @@ export function AddApplicationDropdown({
       <div className="inside flex flex-col gap-4 py-6 h-full">
         {/* Top row  */}
         <AddApplicationTopRow setOpenMenu={setOpenMenu} />
-        <div className="bottom-bar flex flex-col flex-1 justify-between px-6">
+        <form className="bottom-bar flex flex-col flex-1 justify-between px-6">
           {/* Actual Form */}
           <div className="bg-slate-100 text-slate-900 rounded-lg">
             <div className="flex items-center justify-between px-4 py-3 rounded-lg ">
@@ -91,11 +99,12 @@ export function AddApplicationDropdown({
             <button
               className="p-1 px-2 bg-blue-500 cursor-pointer rounded-2xl text-white"
               onClick={handleAdd}
+              type="submit"
             >
               Add
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
@@ -124,7 +133,6 @@ export function SettingsDropdown({
           <span className="text-left">Visible Columns</span>
           <ChevronRight size={21} strokeWidth={1} />
         </div>
-        //
         {toggleVisibleCol && (
           <VisibleColumnsDropdown
             handleLeave={handleLeave}
@@ -142,10 +150,13 @@ export function AccountDropdown({
 }: {
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
 }) {
+  const navigate = useNavigate();
+
   function handleLogOut() {
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
+    navigate("/login");
   }
   return (
     <div className="absolute right-0 top-full z-50 mt-1 flex w-36 flex-col gap-3.5 rounded-lg bg-white p-3 text-sm shadow-md">

@@ -38,6 +38,7 @@ export function HomePage({
       <hr className="w-screen relative left-1/2 -translate-x-1/2 border-t border-slate-300" />
       <RenderCol
         applications={applications}
+        setApplications={setApplications}
         statuses={statuses}
         setStatuses={setStatuses}
       />

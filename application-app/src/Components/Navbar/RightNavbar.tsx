@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import { SettingsButton } from "./SettingsButton";
 import { UserButton } from "./UserButton";
 import {
@@ -23,7 +22,6 @@ export type OpenMenu = "settings" | "account" | "addApplication" | null;
 export function RightNavbar({
   statuses,
   setStatuses,
-  user,
   setUser,
   setApplications,
 }: RightNavbarProps) {
@@ -50,50 +48,39 @@ export function RightNavbar({
     setOpenMenu((prev) => (prev === menu ? null : menu));
   }
 
-  if (!user) {
-    return (
-      <Link
-        className="text-sm bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"
-        to="/login"
-      >
-        Log in
-      </Link>
-    );
-  } else {
-    return (
-      <div ref={navbarRef} className="flex items-center gap-3">
-        <div className="flex">
-          <AddButton
-            handleClick={() => {
-              toggleMenu("addApplication");
-            }}
+  return (
+    <div ref={navbarRef} className="flex items-center gap-3">
+      <div className="flex">
+        <AddButton
+          handleClick={() => {
+            toggleMenu("addApplication");
+          }}
+        />
+        {openMenu === "addApplication" && (
+          <AddApplicationDropdown
+            setOpenMenu={setOpenMenu}
+            setApplications={setApplications}
           />
-          {openMenu === "addApplication" && (
-            <AddApplicationDropdown
-              setOpenMenu={setOpenMenu}
-              setApplications={setApplications}
-            />
-          )}
-        </div>
-        <div className="relative flex">
-          <SettingsButton
-            handleClick={() => {
-              toggleMenu("settings");
-            }}
-          />
-          {openMenu === "settings" && (
-            <SettingsDropdown statuses={statuses} setStatuses={setStatuses} />
-          )}
-        </div>
-        <div ref={navbarRef} className="relative flex">
-          <UserButton
-            handleClick={() => {
-              toggleMenu("account");
-            }}
-          />
-          {openMenu === "account" && <AccountDropdown setUser={setUser} />}
-        </div>
+        )}
       </div>
-    );
-  }
+      <div className="relative flex">
+        <SettingsButton
+          handleClick={() => {
+            toggleMenu("settings");
+          }}
+        />
+        {openMenu === "settings" && (
+          <SettingsDropdown statuses={statuses} setStatuses={setStatuses} />
+        )}
+      </div>
+      <div ref={navbarRef} className="relative flex">
+        <UserButton
+          handleClick={() => {
+            toggleMenu("account");
+          }}
+        />
+        {openMenu === "account" && <AccountDropdown setUser={setUser} />}
+      </div>
+    </div>
+  );
 }
