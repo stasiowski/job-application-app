@@ -3,6 +3,7 @@
 A full-stack job application tracker for managing applications, tracking their status, and logging in as a user.
 
 This project contains:
+
 - `application-app/` — a React + TypeScript frontend for the user interface
 - `backend/` — an Express + MongoDB API for authentication and application data
 
@@ -18,6 +19,7 @@ This project contains:
 ## Tech Stack
 
 Frontend
+
 - React
 - TypeScript
 - Vite
@@ -26,6 +28,7 @@ Frontend
 - Axios
 
 Backend
+
 - Node.js
 - Express
 - MongoDB with Mongoose
@@ -52,3 +55,21 @@ job-application-app/
 │   └── .env.example (if added locally)
 ├── README.md                # This file
 └── .gitignore
+```
+
+## Frontend Tests
+
+The frontend uses Vitest, React Testing Library, and jsdom for component tests. From the `application-app/` directory, install dependencies and run the test suite:
+
+```bash
+npm install
+npm test
+```
+
+Run tests in watch mode during development with:
+
+```bash
+npm run test:watch
+```
+
+Tests live alongside the components they cover under `src/Components/`. The current suite covers application cards, application forms, status columns, and the login page.
