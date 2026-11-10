@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { StatusesType } from "../../Types/StatusesType";
 import type { UserType } from "../../Types/UserType";
 
+// HomePage renders the main dashboard shell: user navigation and the application columns.
 type HomePageProps = {
   applications: ApplicationType[];
   user: UserType;
@@ -18,6 +19,7 @@ export function HomePage({
   setUser,
   setApplications,
 }: HomePageProps) {
+  // The status filters control which job stages are visible on the board.
   const [statuses, setStatuses] = useState<StatusesType>({
     Saved: true,
     Applied: true,

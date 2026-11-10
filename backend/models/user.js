@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
+// The user document keeps authentication data and the list of application references.
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   passwordHash: String,

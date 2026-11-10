@@ -1,9 +1,10 @@
+// API routes for managing job applications tied to an authenticated user.
 const applicationRouter = require("express").Router();
 const Application = require("../models/application");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-//Returns token from request authorization param
+// Extract the bearer token from the Authorization header.
 function getTokenFrom(request) {
   const authorization = request.get("authorization");
   if (authorization && authorization.startsWith("Bearer ")) {
@@ -12,7 +13,7 @@ function getTokenFrom(request) {
   return null;
 }
 
-//Gets token from body, verifies it, finds user in db
+// Verify the JWT and resolve the authenticated user from the database.
 async function getUserFromToken(request) {
   const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
   if (!decodedToken.id) {
@@ -21,7 +22,8 @@ async function getUserFromToken(request) {
   const user = await User.findById(decodedToken.id);
   return user;
 }
-// Returns all applications as json
+
+// Return all applications associated with the currently authenticated user.
 applicationRouter.get("/", async (request, response) => {
   try {
     const user = await getUserFromToken(request);
@@ -44,7 +46,8 @@ applicationRouter.get("/", async (request, response) => {
     });
   }
 });
-// Creates new Application
+
+// Create a new application record for the logged-in user.
 applicationRouter.post("/", async (request, response) => {
   const body = request.body;
   const user = await getUserFromToken(request);
@@ -65,14 +68,15 @@ applicationRouter.post("/", async (request, response) => {
     location: body.location,
     user: user._id,
   });
-  //saves to mongodb db
+
+  // Persist the new record and keep the user reference in sync.
   const savedApplication = await newApp.save();
   user.applications = user.applications.concat(newApp.id);
   await user.save();
   return response.status(201).json(savedApplication);
 });
 
-// Updates Application
+// Update an existing application by id.
 applicationRouter.put("/:id", async (request, response) => {
   const body = request.body;
 
@@ -102,10 +106,10 @@ applicationRouter.put("/:id", async (request, response) => {
   return response.status(200).json(updatedApplication);
 });
 
-// Deletes Application
+// Remove an application from the database.
 applicationRouter.delete("/:id", async (request, response) => {
   const deletedApp = await Application.findByIdAndDelete(request.params.id);
   return response.status(204).json(deletedApp);
 });
-//Exports router
+
 module.exports = applicationRouter;

@@ -9,12 +9,14 @@ import { LoginPage } from "./Components/Login/LoginPage";
 import type { UserType } from "./Types/UserType";
 import { useNavigate } from "react-router-dom";
 
+// App is the root route component. It restores the session from localStorage,
+// loads the current user's applications, and routes between the dashboard and login screen.
 function App() {
   const [applications, setApplications] = useState<ApplicationType[]>([]);
   const [user, setUser] = useState<UserType | null>(null);
   const navigate = useNavigate();
 
-  // Checks if logged in, then gets all applications from that user
+  // On first render, check whether a logged-in user exists and fetch that user's application list.
   useEffect(() => {
     const userJSON = localStorage.getItem("user");
     if (userJSON) {

@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Job Application App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack job application tracker for managing applications, tracking their status, and logging in as a user.
 
-Currently, two official plugins are available:
+This project contains:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `application-app/` — a React + TypeScript frontend for the user interface
+- `backend/` — an Express + MongoDB API for authentication and application data
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- User registration and login
+- JWT-based authentication
+- Create, read, update, and delete job applications
+- Track application status such as saved, applied, interview, offered, and rejected
+- Filter applications by status from the frontend
+- Local persistence of the authenticated user in the browser
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Frontend
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- React Router DOM
+- Tailwind CSS
+- Axios
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Backend
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Node.js
+- Express
+- MongoDB with Mongoose
+- JWT for authentication
+- bcrypt for password hashing
+- dotenv for environment variables
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+job-application-app/
+├── application-app/         # Frontend React app
+│   ├── src/
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── index.html
+├── backend/                 # Express API
+│   ├── controllers/
+│   ├── models/
+│   ├── utils/
+│   ├── app.js
+│   ├── index.js
+│   ├── package.json
+│   └── .env.example (if added locally)
+├── README.md                # This file
+└── .gitignore
 ```

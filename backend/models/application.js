@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
+// Each application record stores a job application and links it to the owning user.
 const applicationSchema = new mongoose.Schema({
   title: String,
   company: String,
