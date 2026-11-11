@@ -17,7 +17,8 @@ mongoose
   .then(() => logger.info("connected to mongoDB"))
   .catch((error) => logger.error(error));
 
-// Allow controllers to read JSON request bodies from incoming requests.
+// middleware
+app.use(express.static("dist"));
 app.use(express.json());
 
 // Register each route group used by the frontend application.
