@@ -7,6 +7,12 @@ This project contains:
 - `application-app/` — a React + TypeScript frontend for the user interface
 - `backend/` — an Express + MongoDB API for authentication and application data
 
+## Live Demo
+
+<img width="1709" height="895" alt="image" src="https://github.com/user-attachments/assets/9c201d6d-8aeb-4dfe-a6f3-ee6f07945737" />
+
+[Demo](https://job-application-app-b5dt.onrender.com)
+
 ## Features
 
 - User registration and login
